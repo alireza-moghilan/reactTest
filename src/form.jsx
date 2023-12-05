@@ -3,6 +3,7 @@ import Joi from "joi";
 
 export const FormAddProducts = () => {
 
+    // state
     const [product, setProduct] = useState(
         {
             nameProduct: "",
@@ -11,7 +12,9 @@ export const FormAddProducts = () => {
             description: ""
         }
     );
+    const [errors, setErrors] = useState([]);
 
+    // erorr form
     const schema = Joi.object({
         nameProduct: Joi.string()
             .alphanum()
@@ -44,7 +47,32 @@ export const FormAddProducts = () => {
         clone[nameInp] = valueInp;
         setProduct(clone)
     }
-    const [errors, setErrors] = useState([]);
+
+    const validate = () => {
+        // called schema
+        const result = schema.validate(product, { abortEarly: false, allowUnknown: true })
+
+        let validate = true;
+        // check Result
+        if (result.error && result.error.details && result.error.details.length > 0) {
+            // Change the state of a variable    
+            validate = false;
+            const details = result.error.details;
+            const errors = details.map(error => (
+                { message: error.message, path: error.path }
+            ))
+            setErrors(errors);
+        }
+        else {
+            // Set State
+            setErrors([]);
+            // Show Toast
+            document.querySelector('.toastSub').classList.add('show')
+        }
+
+        return validate;
+    }
+    
 
     // click on btn Add 
     const addProducts = (ev) => {
@@ -55,26 +83,7 @@ export const FormAddProducts = () => {
             return
     }
 
-    const validate = () => {
-        const result = schema.validate(product, { abortEarly: false, allowUnknown: true })
-
-        let validate = true;
-        if (result.error && result.error.details && result.error.details.length > 0) {
-            validate = false;
-            const details = result.error.details;
-            const errors = details.map(error => (
-                { message: error.message, path: error.path }
-            ))
-            setErrors(errors);
-        }
-        else {
-            setErrors([]);
-            document.querySelector('.toastSub').classList.add('show')
-        }
-
-        return validate;
-    }
-
+    // subError 
     const subError = (evName) => {
         let value = "";
         for (let index = 0; index < errors.length; index++) {
@@ -88,6 +97,7 @@ export const FormAddProducts = () => {
 
     return (
         <>
+        {/* start code toast */}
             <div class=" toast toastSub position-absolute end-0 m-4" role="alert" aria-live="assertive">
                 <div class="toast-body">
                     Information has been successfully registered.☺
@@ -97,6 +107,9 @@ export const FormAddProducts = () => {
                     </div>
                 </div>
             </div>
+        {/* end code toast */}
+
+        {/* form content */}
             <div className="container p-5">
                 <div className="mb-3">
                     <h1>Form Add Products</h1>
@@ -146,6 +159,8 @@ export const FormAddProducts = () => {
                     </div>
                 </form>
             </div>
+        {/* end form */}
+
         </>
     )
 }
