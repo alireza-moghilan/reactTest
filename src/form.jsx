@@ -90,7 +90,7 @@ export const FormAddProducts = () => {
         <>
             <div class=" toast toastSub position-absolute end-0 m-4" role="alert" aria-live="assertive">
                 <div class="toast-body">
-                    Information has been successfully registered.
+                    Information has been successfully registered.☺
                     <div class="mt-2 pt-2 border-top">
                         <button type="button" class="btn btn-primary btn-sm">Take action</button>
                         <button type="button" class="btn btn-secondary btn-sm ms-2" data-bs-dismiss="toast">Close</button>
